@@ -1,0 +1,28 @@
+package com.example.marsphotos.fake
+
+import com.example.marsphotos.fake.rules.TestDispatcherRule
+import com.example.marsphotos.ui.screens.MarsUiState
+import com.example.marsphotos.ui.screens.MarsViewModel
+import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.InternalSerializationApi
+import org.junit.Assert.assertEquals
+import org.junit.Rule
+import kotlin.test.Test
+
+class MarsViewModelTest {
+    @get:Rule
+    val testDispatcher = TestDispatcherRule()
+
+    @OptIn(InternalSerializationApi::class)
+    @Test
+    fun marsViewModel_getMarsPhotos_verifyMarsUiStateSuccess() =
+        runTest {
+            val marsViewModel = MarsViewModel(
+                marsPhotosRepository = FakeNetworkMarsPhotosRepository()
+            )
+            assertEquals(
+                MarsUiState.Success(FakeDataSource.photosList),
+                marsViewModel.marsUiState
+            )
+        }
+}
